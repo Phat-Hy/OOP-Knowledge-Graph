@@ -5,8 +5,12 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/:path*.(css|js|png|jpg|jpeg|gif|svg|ico|json)",
-      "destination": "/oop-kg/frontend/:path*.$1"
+      "source": "/style.css",
+      "destination": "/oop-kg/frontend/style.css"
+    },
+    {
+      "source": "/app.js",
+      "destination": "/oop-kg/frontend/app.js"
     },
     {
       "source": "/((?!api/).*)",
