@@ -1,0 +1,532 @@
+{
+  "nodes": [
+    {
+      "id": "class",
+      "title": "Class (Lớp)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Bản thiết kế (blueprint) để tạo ra các đối tượng, chứa các thuộc tính và phương thức.",
+      "details": "Lớp (Class) là một cấu trúc lập trình định nghĩa các đặc tính (thuộc tính - attributes/fields) và hành vi (phương thức - methods) chung cho tất cả các đối tượng được tạo ra từ nó. Nó hoạt động như một kiểu dữ liệu do người dùng tự định nghĩa.",
+      "qas": [
+        {
+          "question": "Sự khác biệt giữa Class và Struct trong C++?",
+          "answer": "Trong C++, mặc định các thành viên của Class là private, còn mặc định các thành viên của Struct là public."
+        },
+        {
+          "question": "Một Class có chiếm bộ nhớ vật lý không?",
+          "answer": "Không. Class chỉ là một định nghĩa/khuôn mẫu và không chiếm bộ nhớ cho đến khi các đối tượng (instances) của nó được khởi tạo (trừ vùng nhớ chứa mã lệnh tĩnh)."
+        }
+      ],
+      "code": {
+        "java": "public class Animal {\n    private String name;\n    public Animal(String name) {\n        this.name = name;\n    }\n    public void speak() {\n        System.out.println(name + \" makes a sound.\");\n    }\n}",
+        "cpp": "class Animal {\nprivate:\n    std::string name;\npublic:\n    Animal(std::string name) : name(name) {}\n    void speak() {\n        std::cout << name << \" makes a sound.\\n\";\n    }\n};",
+        "python": "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        print(f\"{self.name} makes a sound.\")",
+        "typescript": "class Animal {\n    private name: string;\n    constructor(name: string) {\n        this.name = name;\n    }\n    public speak(): void {\n        console.log(`${this.name} makes a sound.`);\n    }\n}"
+      }
+    },
+    {
+      "id": "object",
+      "title": "Object (Đối tượng)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Một thực thể cụ thể (instance) được khởi tạo từ lớp, có trạng thái và hành vi riêng.",
+      "details": "Đối tượng (Object) là một thực thể trong thế giới thực hoặc một thực thể logic được biểu diễn trong bộ nhớ của chương trình. Nó có ba đặc trưng: trạng thái (State - giá trị thuộc tính), hành vi (Behavior - các phương thức có thể thực thi), và định danh (Identity - địa chỉ bộ nhớ duy nhất).",
+      "qas": [
+        {
+          "question": "Instance và Object khác nhau như thế nào?",
+          "answer": "Đối tượng (Object) là khái niệm chung, còn Thực thể (Instance) mô tả mối quan hệ cụ thể của đối tượng đó với lớp của nó (ví dụ: 'Dog is an instance of Animal')."
+        }
+      ],
+      "code": {
+        "java": "Animal dog = new Animal(\"Buddy\");\ndog.speak();",
+        "cpp": "Animal dog(\"Buddy\");\ndog.speak();",
+        "python": "dog = Animal(\"Buddy\")\ndog.speak()",
+        "typescript": "const dog = new Animal(\"Buddy\");\ndog.speak();"
+      }
+    },
+    {
+      "id": "encapsulation",
+      "title": "Encapsulation (Tính đóng gói)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Che giấu trạng thái nội bộ của đối tượng và chỉ cho phép truy cập thông qua các phương thức công khai.",
+      "details": "Đóng gói (Encapsulation) bảo vệ dữ liệu bên trong của đối tượng khỏi bị can thiệp trái phép bằng cách sử dụng các chỉ thị truy cập (access modifiers như private, protected) và cung cấp các phương thức getter/setter công khai. Nó giúp tăng tính bảo mật và dễ bảo trì code.",
+      "qas": [
+        {
+          "question": "Tại sao lại cần getter/setter thay vì truy cập biến trực tiếp?",
+          "answer": "Getter/setter giúp kiểm soát tính hợp lệ của dữ liệu (validation), chỉ cho phép đọc (read-only) nếu không viết setter, và che giấu cấu trúc dữ liệu thực tế bên trong lớp."
+        }
+      ],
+      "code": {
+        "java": "public class BankAccount {\n    private double balance;\n    public double getBalance() { return balance; }\n    public void deposit(double amount) {\n        if (amount > 0) balance += amount;\n    }\n}",
+        "cpp": "class BankAccount {\nprivate:\n    double balance;\npublic:\n    double getBalance() const { return balance; }\n    void deposit(double amount) {\n        if (amount > 0) balance += amount;\n    }\n};",
+        "python": "class BankAccount:\n    def __init__(self):\n        self.__balance = 0 # Private\n    def get_balance(self):\n        return self.__balance\n    def deposit(self, amount):\n        if amount > 0:\n            self.__balance += amount",
+        "typescript": "class BankAccount {\n    private balance: number = 0;\n    public getBalance(): number { return this.balance; }\n    public deposit(amount: number): void {\n        if (amount > 0) this.balance += amount;\n    }\n}"
+      }
+    },
+    {
+      "id": "inheritance",
+      "title": "Inheritance (Tính kế thừa)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Cho phép một lớp con kế thừa lại các thuộc tính và phương thức của lớp cha, tái sử dụng code.",
+      "details": "Kế thừa (Inheritance) thể hiện mối quan hệ 'IS-A' (là một). Lớp con (subclass/derived class) kế thừa toàn bộ thành viên public/protected của lớp cha (superclass/base class) và có thể mở rộng hoặc định nghĩa lại (override) chúng.",
+      "qas": [
+        {
+          "question": "Kế thừa có làm tăng tính phụ thuộc giữa các lớp không?",
+          "answer": "Có, kế thừa tạo ra sự liên kết chặt chẽ (tight coupling). Lớp con sẽ phụ thuộc vào sự thay đổi của lớp cha. Do đó nên cân nhắc quy tắc 'Composition over Inheritance' (ưu tiên kết hợp hơn kế thừa)."
+        }
+      ],
+      "code": {
+        "java": "public class Dog extends Animal {\n    public Dog(String name) { super(name); }\n    @Override\n    public void speak() {\n        System.out.println(\"Woof! Woof!\");\n    }\n}",
+        "cpp": "class Dog : public Animal {\npublic:\n    Dog(std::string name) : Animal(name) {}\n    void speak() override {\n        std::cout << \"Woof! Woof!\\n\";\n    }\n};",
+        "python": "class Dog(Animal):\n    def speak(self):\n        print(\"Woof! Woof!\")",
+        "typescript": "class Dog extends Animal {\n    constructor(name: string) {\n        super(name);\n    }\n    public speak(): void {\n        console.log(\"Woof! Woof!\");\n    }\n}"
+      }
+    },
+    {
+      "id": "polymorphism",
+      "title": "Polymorphism (Tính đa hình)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Cho phép các đối tượng khác nhau phản hồi cùng một thông điệp (tên hàm) theo những cách khác nhau.",
+      "details": "Đa hình (Polymorphism) gồm 2 loại chính: Đa hình lúc biên dịch (Compile-time / Static - nạp chồng hàm Overloading) và Đa hình lúc chạy (Runtime / Dynamic - ghi đè hàm Overriding dựa trên kiểu thực tế của đối tượng tại thời điểm thực thi).",
+      "qas": [
+        {
+          "question": "Đa hình lúc chạy được hiện thực hóa như thế nào dưới hệ thống?",
+          "answer": "Trong C++, đa hình lúc chạy sử dụng Virtual Table (V-Table) và Virtual Pointer (V-Ptr) để trỏ đến các cài đặt hàm chính xác lúc chạy. Trong Java, tất cả các phương thức không tĩnh mặc định đều là ảo."
+        }
+      ],
+      "code": {
+        "java": "Animal pet = new Dog(\"Rufus\");\npet.speak(); // In ra \"Woof! Woof!\" thay vì tiếng mặc định",
+        "cpp": "Animal* pet = new Dog(\"Rufus\");\npet->speak(); // Cần khai báo 'virtual void speak()' ở lớp cha",
+        "python": "def make_speak(animal_obj):\n    animal_obj.speak() # Đa hình kiểu duck typing\nmake_speak(Dog(\"Rufus\"))",
+        "typescript": "const pet: Animal = new Dog(\"Rufus\");\npet.speak(); // In ra \"Woof! Woof!\""
+      }
+    },
+    {
+      "id": "abstraction",
+      "title": "Abstraction (Tính trừu tượng)",
+      "category": "basic",
+      "priority": "high",
+      "summary": "Tập trung vào các đặc điểm thiết yếu của đối tượng, ẩn đi các chi tiết triển khai phức tạp.",
+      "details": "Trừu tượng (Abstraction) cho phép thiết kế hệ thống bằng cách định nghĩa các giao diện (interface) hoặc lớp trừu tượng (abstract class) mà không cần bận tâm đến việc chúng được thực hiện chi tiết như thế nào. Giúp giảm bớt sự phức tạp và tăng tính linh hoạt của phần mềm.",
+      "qas": [
+        {
+          "question": "Sự khác biệt giữa Đóng gói và Trừu tượng?",
+          "answer": "Đóng gói giải quyết vấn đề che giấu thông tin và dữ liệu nội bộ (HOW). Trừu tượng giải quyết vấn đề đơn giản hóa giao diện bằng cách tập trung vào những hành vi cốt lõi (WHAT)."
+        }
+      ],
+      "code": {
+        "java": "public interface Vehicle {\n    void startEngine();\n    void stopEngine();\n}",
+        "cpp": "class Vehicle {\npublic:\n    virtual void startEngine() = 0; // Pure virtual\n    virtual void stopEngine() = 0;\n};",
+        "python": "from abc import ABC, abstractmethod\nclass Vehicle(ABC):\n    @abstractmethod\n    def start_engine(self):\n        pass",
+        "typescript": "interface Vehicle {\n    startEngine(): void;\n    stopEngine(): void;\n}"
+      }
+    },
+    {
+      "id": "multiple-inheritance",
+      "title": "Multiple Inheritance (Đa kế thừa)",
+      "category": "advanced",
+      "priority": "medium",
+      "summary": "Một lớp con kế thừa từ nhiều lớp cha cùng một lúc.",
+      "details": "Đa kế thừa (Multiple Inheritance) cho phép lớp con tích hợp thuộc tính/phương thức của nhiều lớp cha khác nhau. Tuy nhiên, nó dẫn đến bài toán 'Diamond Problem' (xung đột khi hai lớp cha có cùng phương thức trùng tên). Các ngôn ngữ như Java và C# cấm đa kế thừa lớp và chỉ cho phép đa kế thừa giao diện (interface).",
+      "qas": [
+        {
+          "question": "Diamond Problem là gì và C++ giải quyết nó như thế nào?",
+          "answer": "Diamond Problem xảy ra khi lớp D kế thừa từ B và C, và cả B và C đều kế thừa từ A. Khi D gọi phương thức kế thừa từ A, trình biên dịch không biết chọn đường qua B hay C. C++ giải quyết bằng từ khóa 'virtual inheritance' (ví dụ: class B : virtual public A)."
+        }
+      ],
+      "code": {
+        "java": "// Java không cho phép đa kế thừa lớp, phải dùng interfaces\ninterface Flyer { void fly(); }\ninterface Swimmer { void swim(); }\nclass Duck implements Flyer, Swimmer {\n    public void fly() {}\n    public void swim() {}\n}",
+        "cpp": "class Flyer {\npublic:\n    virtual void fly() = 0;\n};\nclass Swimmer {\npublic:\n    virtual void swim() = 0;\n};\nclass Duck : public Flyer, public Swimmer {\npublic:\n    void fly() override {}\n    void swim() override {}\n};",
+        "python": "# Python hỗ trợ đa kế thừa và giải quyết bằng Method Resolution Order (MRO)\nclass Flyer:\n    def move(self): print(\"Flying\")\nclass Swimmer:\n    def move(self): print(\"Swimming\")\nclass Duck(Flyer, Swimmer):\n    pass\n# Duck().move() sẽ in ra \"Flying\" dựa trên thứ tự MRO",
+        "typescript": "// TypeScript dùng Mixins hoặc Interface merges\ntype Constructor = new (...args: any[]) => {};\nfunction Flyable<TBase extends Constructor>(Base: TBase) {\n    return class extends Base {\n        fly() {}\n    };\n}"
+      }
+    },
+    {
+      "id": "abstract-class",
+      "title": "Abstract Class (Lớp trừu tượng)",
+      "category": "advanced",
+      "priority": "high",
+      "summary": "Lớp không thể khởi tạo trực tiếp, dùng làm khuôn mẫu cho các lớp con và có thể chứa cả phương thức trừu tượng lẫn cụ thể.",
+      "details": "Lớp trừu tượng (Abstract Class) là một lớp đại diện cho một khái niệm chung chung. Nó có thể chứa các biến thành viên, phương thức cụ thể (có phần thân code) và phương thức trừu tượng (chỉ có chữ ký hàm). Lớp con bắt buộc phải triển khai toàn bộ các phương thức trừu tượng này.",
+      "qas": [
+        {
+          "question": "Abstract Class khác biệt thế nào so với Interface?",
+          "answer": "Abstract Class có thể giữ trạng thái (có biến instance) và có các hàm hoàn chỉnh. Interface trước Java 8 chỉ chứa khai báo hàm tĩnh (constant) và không giữ trạng thái đối tượng."
+        }
+      ],
+      "code": {
+        "java": "public abstract class GraphicObject {\n    int x, y;\n    void moveTo(int newX, int newY) { x = newX; y = newY; } // Hàm cụ thể\n    abstract void draw(); // Hàm trừu tượng\n}",
+        "cpp": "class GraphicObject {\nprotected:\n    int x, y;\npublic:\n    void moveTo(int newX, int newY) { x = newX; y = newY; }\n    virtual void draw() = 0; // Pure virtual\n};",
+        "python": "from abc import ABC, abstractmethod\nclass GraphicObject(ABC):\n    def __init__(self):\n        self.x = 0\n        self.y = 0\n    def move_to(self, new_x, new_y):\n        self.x = new_x\n        self.y = new_y\n    @abstractmethod\n    def draw(self):\n        pass",
+        "typescript": "abstract class GraphicObject {\n    protected x: number = 0;\n    protected y: number = 0;\n    public moveTo(newX: number, newY: number): void {\n        this.x = newX;\n        this.y = newY;\n    }\n    abstract draw(): void;\n}"
+      }
+    },
+    {
+      "id": "interface",
+      "title": "Interface (Giao diện)",
+      "category": "advanced",
+      "priority": "high",
+      "summary": "Một hợp đồng (contract) chỉ chứa các khai báo phương thức không có phần thân thực thi.",
+      "details": "Interface định nghĩa một tập hợp hành vi mà bất kỳ lớp nào thực thi (implement) nó cũng bắt buộc phải tuân theo. Đây là công cụ đắc lực nhất để thiết kế Loose Coupling (liên kết lỏng lẻo) trong kiến trúc phần mềm chuyên nghiệp.",
+      "qas": [
+        {
+          "question": "Interface có thể kế thừa từ Interface khác không?",
+          "answer": "Có. Trong hầu hết các ngôn ngữ hướng đối tượng (Java, TS, C#), một Interface có thể kế thừa (extends) một hoặc nhiều Interface khác."
+        }
+      ],
+      "code": {
+        "java": "public interface Printable {\n    void print();\n}",
+        "cpp": "// C++ dùng lớp cơ sở chứa hoàn toàn pure virtual functions\nclass Printable {\npublic:\n    virtual void print() = 0;\n    virtual ~Printable() {} // Đảm bảo hủy đối tượng an toàn\n};",
+        "python": "# Python dùng Giao diện không chính thức (Protocol hoặc ABC)\nfrom typing import Protocol\nclass Printable(Protocol):\n    def print_item(self) -> None: ...",
+        "typescript": "interface Printable {\n    print(): void;\n}"
+      }
+    },
+    {
+      "id": "solid",
+      "title": "SOLID Principles (Nguyên lý SOLID)",
+      "category": "solid",
+      "priority": "high",
+      "summary": "Tập hợp 5 nguyên lý thiết kế hướng đối tượng giúp code dễ đọc, dễ mở rộng và bảo trì.",
+      "details": "SOLID được đúc kết bởi Robert C. Martin (Uncle Bob), bao gồm: Single Responsibility (Sơn trách nhiệm), Open/Closed (Mở/Đóng), Liskov Substitution (Thay thế Liskov), Interface Segregation (Phân tách Interface), và Dependency Inversion (Đảo ngược phụ thuộc).",
+      "qas": [
+        {
+          "question": "Mục tiêu cốt lõi của SOLID là gì?",
+          "answer": "Mục tiêu là hạn chế sự phụ thuộc cứng nhắc (rigidity), dễ vỡ của code (fragility) khi có sự thay đổi, giúp code tái sử dụng tối đa và mở rộng mà không cần viết lại toàn bộ."
+        }
+      ],
+      "code": {
+        "java": "// Cốt lõi của SOLID là hướng đến trừu tượng (Interface)\ninterface OrderProcessor {\n    void process(Order order);\n}",
+        "cpp": "class OrderProcessor {\npublic:\n    virtual void process(const Order& order) = 0;\n};",
+        "python": "from abc import ABC, abstractmethod\nclass OrderProcessor(ABC):\n    @abstractmethod\n    def process(self, order):\n        pass",
+        "typescript": "interface OrderProcessor {\n    process(order: Order): void;\n}"
+      }
+    },
+    {
+      "id": "srp",
+      "title": "Single Responsibility (S - Đơn trách nhiệm)",
+      "category": "solid",
+      "priority": "high",
+      "summary": "Mỗi Class chỉ nên chịu trách nhiệm về một nhiệm vụ duy nhất và chỉ có một lý do duy nhất để thay đổi.",
+      "details": "Một class đảm nhận quá nhiều chức năng (God Class) sẽ trở nên cực kỳ phức tạp và dễ lỗi khi sửa đổi. Cách giải quyết là chia nhỏ các nhiệm vụ (ví dụ: tách hàm lưu DB và hàm gửi Email ra khỏi lớp User).",
+      "qas": [
+        {
+          "question": "Làm thế nào để xác định một Class vi phạm SRP?",
+          "answer": "Hãy tự hỏi: 'Nếu thay đổi nghiệp vụ này, lớp này có phải sửa đổi không?'. Nếu một sự thay đổi về giao diện hiển thị báo cáo bắt buộc phải sửa code trong lớp tính toán dữ liệu, lớp tính toán đó đã vi phạm SRP."
+        }
+      ],
+      "code": {
+        "java": "// Vi phạm: Lớp User chứa cả logic nghiệp vụ lẫn xuất báo cáo\n// Đúng đắn: Tách riêng\npublic class User {\n    private String name;\n}\npublic class UserReportGenerator {\n    public void generateReport(User user) { /* in báo cáo */ }\n}",
+        "cpp": "class User {\n    std::string name;\n};\nclass UserReportGenerator {\npublic:\n    void generateReport(const User& user) {}\n};",
+        "python": "class User:\n    def __init__(self, name):\n        self.name = name\n\nclass UserReportGenerator:\n    def generate_report(self, user):\n        pass",
+        "typescript": "class User {\n    constructor(public name: string) {}\n}\nclass UserReportGenerator {\n    generateReport(user: User) {}\n}"
+      }
+    },
+    {
+      "id": "ocp",
+      "title": "Open/Closed (O - Mở/Đóng)",
+      "category": "solid",
+      "priority": "high",
+      "summary": "Class nên mở rộng để bổ sung tính năng mới, nhưng đóng trước việc sửa đổi trực tiếp mã nguồn cũ.",
+      "details": "Để thêm tính năng, thay vì chỉnh sửa cấu trúc `switch-case` hoặc `if-else` trong hàm của lớp cũ (dẫn đến nguy cơ phá hỏng code cũ đang chạy ổn định), chúng ta nên tận dụng tính kế thừa/đa hình bằng việc tạo một lớp con mới hoặc implements một interface khác.",
+      "qas": [
+        {
+          "question": "Làm sao để triển khai OCP hiệu quả?",
+          "answer": "Sử dụng các Interface hoặc Abstract Class làm điểm trung gian. Lớp gọi sẽ tương tác qua Interface, lớp được gọi sẽ kế thừa và triển khai các biến thể nghiệp vụ khác nhau."
+        }
+      ],
+      "code": {
+        "java": "// Đúng đắn: Sử dụng đa hình thay vì kiểm tra if-else định dạng file\ninterface FileParser {\n    void parse();\n}\nclass PdfParser implements FileParser { public void parse() {} }\nclass ExcelParser implements FileParser { public void parse() {} }",
+        "cpp": "class FileParser {\npublic:\n    virtual void parse() = 0;\n};\nclass PdfParser : public FileParser { void parse() override {} };",
+        "python": "class FileParser(ABC):\n    @abstractmethod\n    def parse(self):\n        pass\nclass PdfParser(FileParser):\n    def parse(self): pass",
+        "typescript": "interface FileParser {\n    parse(): void;\n}\nclass PdfParser implements FileParser { parse() {} }"
+      }
+    },
+    {
+      "id": "lsp",
+      "title": "Liskov Substitution (L - Thay thế Liskov)",
+      "category": "solid",
+      "priority": "medium",
+      "summary": "Các đối tượng của lớp con phải có thể thay thế cho các đối tượng của lớp cha mà không làm thay đổi tính đúng đắn của chương trình.",
+      "details": "Nguyên lý này đảm bảo lớp con giữ nguyên các giao ước (behavioral contract) của lớp cha. Ví dụ kinh điển: Lớp Hình Vuông không nên kế thừa lớp Hình Chữ Nhật nếu việc thay đổi chiều rộng hình vuông vô tình thay đổi cả chiều cao, phá vỡ logic kiểm thử của hình chữ nhật.",
+      "qas": [
+        {
+          "question": "LSP vi phạm khi nào?",
+          "answer": "Khi một lớp con ghi đè phương thức lớp cha bằng cách ném ra một lỗi 'NotImplementedException' hoặc làm thay đổi logic hành vi cốt lõi của lớp cha."
+        }
+      ],
+      "code": {
+        "java": "// Vi phạm: Chim cánh cụt không biết bay nhưng lại kế thừa Bird có phương thức fly()\n// Giải pháp: Tách nhỏ các hành vi\ninterface Flyable { void fly(); }\nclass Eagle implements Flyable { public void fly() {} }\nclass Penguin { /* không implement Flyable */ }",
+        "cpp": "class Flyable {\npublic:\n    virtual void fly() = 0;\n};\nclass Eagle : public Flyable { void fly() override {} };",
+        "python": "class Flyable(ABC):\n    @abstractmethod\n    def fly(self):\n        pass\nclass Eagle(Flyable):\n    def fly(self): pass",
+        "typescript": "interface Flyable {\n    fly(): void;\n}\nclass Eagle implements Flyable { fly() {} }"
+      }
+    },
+    {
+      "id": "isp",
+      "title": "Interface Segregation (I - Phân tách Interface)",
+      "category": "solid",
+      "priority": "medium",
+      "summary": "Nên chia nhỏ các interface lớn thành nhiều interface nhỏ hơn và chuyên biệt hơn, không ép lớp con implement các hàm không dùng tới.",
+      "details": "Một interface 'béo phì' chứa quá nhiều phương thức sẽ ép buộc các lớp implement nó phải định nghĩa cả những hàm rỗng không dùng đến. Phân tách chúng thành các interface nhỏ (ví dụ: `Printable`, `Scanable` thay vì một interface chung `MultiFunctionPrinter`) là cách tối ưu nhất.",
+      "qas": [
+        {
+          "question": "Mối quan hệ giữa ISP và SRP?",
+          "answer": "ISP giống như SRP nhưng áp dụng cho Interface. ISP giúp giữ các Interface sạch sẽ, chỉ tập trung vào một nhóm hành vi tối thiểu và logic."
+        }
+      ],
+      "code": {
+        "java": "// Tách nhỏ\ninterface Printer { void print(); }\ninterface Scanner { void scan(); }\nclass SimplePrinter implements Printer {\n    public void print() { /* thực thi in */ }\n}",
+        "cpp": "class Printer { public: virtual void print() = 0; };\nclass Scanner { public: virtual void scan() = 0; };",
+        "python": "class Printer(ABC):\n    @abstractmethod\n    def print_doc(self): pass\nclass Scanner(ABC):\n    @abstractmethod\n    def scan_doc(self): pass",
+        "typescript": "interface Printer { print(): void; }\ninterface Scanner { scan(): void; }"
+      }
+    },
+    {
+      "id": "dip",
+      "title": "Dependency Inversion (D - Đảo ngược phụ thuộc)",
+      "category": "solid",
+      "priority": "high",
+      "summary": "Lớp cấp cao không nên phụ thuộc trực tiếp vào các lớp cấp thấp; cả hai đều phải phụ thuộc vào các lớp trừu tượng (interfaces).",
+      "details": "Nguyên lý này chống lại sự phụ thuộc cứng nhắc. Thay vì khởi tạo trực tiếp lớp con cấp thấp bên trong lớp cấp cao (ví dụ: `new MySQLDatabase()`), ta đưa interface trừu tượng (`Database`) vào thông qua cơ chế Dependency Injection (DI) (như Constructor Injection).",
+      "qas": [
+        {
+          "question": "Sự khác nhau giữa Dependency Inversion (DIP), Dependency Injection (DI) và IoC Container?",
+          "answer": "DIP là nguyên lý thiết kế (Design Principle). DI là mẫu thiết kế (Design Pattern) thực thi DIP. IoC Container là thư viện/công cụ tự động hóa việc tiêm phụ thuộc (DI)."
+        }
+      ],
+      "code": {
+        "java": "public class PasswordMessenger {\n    private Database db; // Phụ thuộc vào trừu tượng\n    public PasswordMessenger(Database db) { // Dependency Injection\n        this.db = db;\n    }\n}",
+        "cpp": "class PasswordMessenger {\nprivate:\n    Database* db;\npublic:\n    PasswordMessenger(Database* db) : db(db) {}\n};",
+        "python": "class PasswordMessenger:\n    def __init__(self, db: Database): # Dependency Injection\n        self.db = db",
+        "typescript": "class PasswordMessenger {\n    constructor(private db: Database) {}\n}"
+      }
+    },
+    {
+      "id": "design-patterns",
+      "title": "Design Patterns (Mẫu thiết kế)",
+      "category": "patterns",
+      "priority": "medium",
+      "summary": "Các giải pháp chuẩn hóa cho các vấn đề thiết kế phần mềm thường gặp trong lập trình hướng đối tượng.",
+      "details": "Được phổ biến bởi nhóm 'Gang of Four' (GoF) vào năm 1994, được chia làm 3 nhóm chính: Creational Patterns (Mẫu khởi tạo - quản lý tạo đối tượng), Structural Patterns (Mẫu cấu trúc - kết hợp lớp/đối tượng), và Behavioral Patterns (Mẫu hành vi - quản lý tương tác giữa các đối tượng).",
+      "qas": [
+        {
+          "question": "Tại sao phải học Design Patterns?",
+          "answer": "Design Patterns cung cấp ngôn ngữ chung cho các lập trình viên, giúp code dễ đọc, kiểm thử tốt hơn và tránh phải 'phát minh lại bánh xe' cho những bài toán đã có lời giải tối ưu."
+        }
+      ],
+      "code": {
+        "java": "// Cấu trúc chung thường liên quan đến Interface\ninterface PatternSample {\n    void execute();\n}",
+        "cpp": "class PatternSample {\npublic:\n    virtual void execute() = 0;\n};",
+        "python": "class PatternSample(ABC):\n    @abstractmethod\n    def execute(self):\n        pass",
+        "typescript": "interface PatternSample {\n    execute(): void;\n}"
+      }
+    },
+    {
+      "id": "singleton",
+      "title": "Singleton Pattern",
+      "category": "patterns",
+      "priority": "high",
+      "summary": "Đảm bảo một Class chỉ có duy nhất một đối tượng thực thể trong suốt vòng đời ứng dụng và cung cấp cổng truy cập toàn cục.",
+      "details": "Mẫu Singleton khóa constructor của lớp là private để ngăn tạo đối tượng tự do, giữ một biến tĩnh chứa thực thể duy nhất và cung cấp phương thức tĩnh `getInstance()` để truy xuất thực thể đó. Phù hợp cho kết nối Database, Logging, hoặc Config.",
+      "qas": [
+        {
+          "question": "Làm thế nào để đảm bảo Singleton an toàn trong môi trường đa luồng (thread-safe)?",
+          "answer": "Trong Java, sử dụng Double-Checked Locking kết hợp từ khóa 'volatile', hoặc cơ chế 'Bill Pugh Singleton Helper' sử dụng một static inner class."
+        }
+      ],
+      "code": {
+        "java": "public class DatabaseConnection {\n    private static DatabaseConnection instance;\n    private DatabaseConnection() {} // Private Constructor\n    public static synchronized DatabaseConnection getInstance() {\n        if (instance == null) instance = new DatabaseConnection();\n        return instance;\n    }\n}",
+        "cpp": "class DatabaseConnection {\nprivate:\n    DatabaseConnection() {}\npublic:\n    static DatabaseConnection& getInstance() {\n        static DatabaseConnection instance; // Thread-safe in C++11\n        return instance;\n    }\n};",
+        "python": "class DatabaseConnection:\n    _instance = None\n    def __new__(cls):\n        if cls._instance is None:\n            cls._instance = super(DatabaseConnection, cls).__new__(cls)\n        return cls._instance",
+        "typescript": "class DatabaseConnection {\n    private static instance: DatabaseConnection;\n    private constructor() {}\n    public static getInstance(): DatabaseConnection {\n        if (!this.instance) this.instance = new DatabaseConnection();\n        return this.instance;\n    }\n}"
+      }
+    },
+    {
+      "id": "factory",
+      "title": "Factory Method Pattern",
+      "category": "patterns",
+      "priority": "high",
+      "summary": "Định nghĩa một Interface để tạo đối tượng, nhưng để các lớp con quyết định lớp cụ thể nào sẽ được khởi tạo.",
+      "details": "Factory Method ủy quyền việc khởi tạo đối tượng cho lớp con, giúp hệ thống hoạt động độc lập với cách tạo đối tượng và che giấu các chi tiết khởi tạo phức tạp khỏi lớp gọi.",
+      "qas": [
+        {
+          "question": "Sự khác biệt giữa Simple Factory và Factory Method?",
+          "answer": "Simple Factory dùng một lớp đơn giản với câu lệnh if-else/switch để tạo đối tượng. Factory Method dùng tính kế thừa/đa hình, định nghĩa hàm tạo ảo và để các lớp con ghi đè để tạo ra sản phẩm cụ thể."
+        }
+      ],
+      "code": {
+        "java": "abstract class DocumentCreator {\n    public abstract Document createDocument(); // Factory Method\n}\nclass PdfCreator extends DocumentCreator {\n    public Document createDocument() { return new PdfDocument(); }\n}",
+        "cpp": "class DocumentCreator {\npublic:\n    virtual Document* createDocument() = 0;\n};\nclass PdfCreator : public DocumentCreator {\n    Document* createDocument() override { return new PdfDocument(); }\n};",
+        "python": "class DocumentCreator(ABC):\n    @abstractmethod\n    def create_document(self):\n        pass\nclass PdfCreator(DocumentCreator):\n    def create_document(self):\n        return PdfDocument()",
+        "typescript": "abstract class DocumentCreator {\n    abstract createDocument(): Document;\n}\nclass PdfCreator extends DocumentCreator {\n    createDocument(): Document { return new PdfDocument(); }\n}"
+      }
+    },
+    {
+      "id": "observer",
+      "title": "Observer Pattern",
+      "category": "patterns",
+      "priority": "medium",
+      "summary": "Định nghĩa mối quan hệ một-nhiều giữa các đối tượng sao cho khi một đối tượng thay đổi trạng thái, tất cả các đối tượng phụ thuộc đều được thông báo tự động.",
+      "details": "Đối tượng phát thông báo (Subject) quản lý danh sách người nhận tin (Observers). Khi Subject thay đổi trạng thái, nó duyệt danh sách và gọi hàm `update()` của từng Observer. Đây là nền tảng của lập trình hướng sự kiện (event-driven).",
+      "qas": [
+        {
+          "question": "Làm thế nào để tránh rò rỉ bộ nhớ (memory leak) trong Observer Pattern?",
+          "answer": "Khi Observer hủy, nó phải tự hủy đăng ký (unsubscribe/detach) khỏi Subject. Nếu không, Subject vẫn giữ tham chiếu mạnh (strong reference) đến Observer đó, khiến Garbage Collector không thể giải phóng nó."
+        }
+      ],
+      "code": {
+        "java": "interface Observer { void update(String msg); }\nclass NewsPublisher {\n    private List<Observer> observers = new ArrayList<>();\n    public void subscribe(Observer o) { observers.add(o); }\n    public void notify(String msg) {\n        for (Observer o : observers) o.update(msg);\n    }\n}",
+        "cpp": "class Observer { public: virtual void update(std::string msg) = 0; };\nclass NewsPublisher {\n    std::vector<Observer*> observers;\npublic:\n    void subscribe(Observer* o) { observers.push_back(o); }\n    void notify(std::string msg) {\n        for(auto o : observers) o->update(msg);\n    }\n};",
+        "python": "class Observer(ABC):\n    @abstractmethod\n    def update(self, msg): pass\nclass NewsPublisher:\n    def __init__(self):\n        self._observers = []\n    def subscribe(self, o): self._observers.append(o)\n    def notify(self, msg):\n        for o in self._observers: o.update(msg)",
+        "typescript": "interface Observer { update(msg: string): void; }\nclass NewsPublisher {\n    private observers: Observer[] = [];\n    public subscribe(o: Observer) { this.observers.push(o); }\n    public notify(msg: string) {\n        this.observers.forEach(o => o.update(msg));\n    }\n}"
+      }
+    },
+    {
+      "id": "strategy",
+      "title": "Strategy Pattern",
+      "category": "patterns",
+      "priority": "medium",
+      "summary": "Định nghĩa một tập hợp thuật toán, đóng gói từng thuật toán lại và cho phép chúng thay đổi linh hoạt lúc chạy trong đối tượng ngữ cảnh.",
+      "details": "Strategy cho phép chọn thuật toán thực thi tùy thuộc vào hoàn cảnh (ví dụ: chọn hình thức thanh toán thẻ tín dụng, PayPal, hay COD tùy theo lựa chọn của người mua hàng lúc thanh toán).",
+      "qas": [
+        {
+          "question": "Sự khác biệt giữa Strategy và State Pattern?",
+          "answer": "Strategy thường do Client lựa chọn thuật toán truyền vào đối tượng ngữ cảnh và thuật toán hoạt động tương đối độc lập. State biểu diễn các trạng thái nội bộ của đối tượng tự động chuyển đổi lẫn nhau dựa trên các hành vi kích hoạt."
+        }
+      ],
+      "code": {
+        "java": "interface PaymentStrategy { void pay(double amount); }\nclass CreditCardPayment implements PaymentStrategy {\n    public void pay(double amount) { /* thanh toán thẻ */ }\n}\nclass ShoppingCart {\n    private PaymentStrategy payment; // Strategy\n    public void setPayment(PaymentStrategy p) { this.payment = p; }\n    public void checkout(double amount) { payment.pay(amount); }\n}",
+        "cpp": "class PaymentStrategy { public: virtual void pay(double amount) = 0; };\nclass CreditCardPayment : public PaymentStrategy { void pay(double amount) override {} };",
+        "python": "class PaymentStrategy(ABC):\n    @abstractmethod\n    def pay(self, amount): pass\nclass ShoppingCart:\n    def set_payment(self, p: PaymentStrategy): self.payment = p\n    def checkout(self, amount): self.payment.pay(amount)",
+        "typescript": "interface PaymentStrategy { pay(amount: number): void; }\nclass ShoppingCart {\n    private payment!: PaymentStrategy;\n    public setPayment(p: PaymentStrategy) { this.payment = p; }\n    public checkout(amount: number) { this.payment.pay(amount); }\n}"
+      }
+    },
+    {
+      "qas": [
+        {
+          "question": "Tại sao Composition linh hoạt hơn Inheritance?",
+          "answer": "Kế thừa (Inheritance) liên kết tĩnh ở thời điểm biên dịch, lớp con không thể thay đổi hành vi kế thừa lúc chạy. Kết hợp (Composition) cho phép thay đổi đối tượng thành phần lúc chạy (dynamic binding) và giúp bảo vệ đóng gói dữ liệu của lớp thành phần."
+        }
+      ],
+      "code": {},
+      "title": "Composition over Inheritance (Uu tiên kết hợp hơn kế thừa)",
+      "id": "composition-over-inheritance-uu-ti-n-k-t-h-p-h-n-k-th-a",
+      "category": "advanced",
+      "priority": "high",
+      "summary": "Một nguyên tắc thiết kế hướng đối tượng ưu tiên việc kết hợp các đối tượng thay vì kế thừa.",
+      "details": "Nguyên lý này khuyến cáo thiết kế các class bằng cách chứa các instance của class khác (has-a) thay vì kế thừa hành vi của class cha (is-a). Giúp tránh việc phân cấp lớp quá sâu và hạn chế sự phụ thuộc chặt chẽ giữa lớp cha và lớp con."
+    },
+    {
+      "qas": [
+        {
+          "question": "Duck typing có an toàn không?",
+          "answer": "Duck typing linh hoạt nhưng dễ gây lỗi Runtime (AttributeError) nếu đối tượng không hỗ trợ hàm cần gọi. Thường cần test coverage cao để đảm bảo an toàn."
+        }
+      ],
+      "code": {},
+      "title": "Duck Typing",
+      "id": "duck-typing",
+      "category": "advanced",
+      "priority": "low",
+      "summary": "Một hình thức đa hình động trong các ngôn ngữ dynamic typing (như Python, JS).",
+      "details": "\"Nếu nó đi như một con vịt và kêu như một con vịt, thì nó là con vịt\". Hệ thống không quan tâm đến kiểu thực tế của đối tượng, chỉ quan tâm xem đối tượng đó có hỗ trợ phương thức được gọi hay không."
+    }
+  ],
+  "links": [
+    {
+      "source": "class",
+      "target": "object"
+    },
+    {
+      "source": "class",
+      "target": "encapsulation"
+    },
+    {
+      "source": "class",
+      "target": "inheritance"
+    },
+    {
+      "source": "class",
+      "target": "polymorphism"
+    },
+    {
+      "source": "class",
+      "target": "abstraction"
+    },
+    {
+      "source": "inheritance",
+      "target": "multiple-inheritance"
+    },
+    {
+      "source": "abstraction",
+      "target": "abstract-class"
+    },
+    {
+      "source": "abstraction",
+      "target": "interface"
+    },
+    {
+      "source": "abstract-class",
+      "target": "interface"
+    },
+    {
+      "source": "interface",
+      "target": "solid"
+    },
+    {
+      "source": "solid",
+      "target": "srp"
+    },
+    {
+      "source": "solid",
+      "target": "ocp"
+    },
+    {
+      "source": "solid",
+      "target": "lsp"
+    },
+    {
+      "source": "solid",
+      "target": "isp"
+    },
+    {
+      "source": "solid",
+      "target": "dip"
+    },
+    {
+      "source": "interface",
+      "target": "design-patterns"
+    },
+    {
+      "source": "design-patterns",
+      "target": "singleton"
+    },
+    {
+      "source": "design-patterns",
+      "target": "factory"
+    },
+    {
+      "source": "design-patterns",
+      "target": "observer"
+    },
+    {
+      "source": "design-patterns",
+      "target": "strategy"
+    },
+    {
+      "source": "class",
+      "target": "composition-over-inheritance-uu-ti-n-k-t-h-p-h-n-k-th-a"
+    },
+    {
+      "source": "inheritance",
+      "target": "composition-over-inheritance-uu-ti-n-k-t-h-p-h-n-k-th-a"
+    },
+    {
+      "source": "polymorphism",
+      "target": "duck-typing"
+    }
+  ]
+}

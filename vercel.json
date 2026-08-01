@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/:path*.(css|js|png|jpg|jpeg|gif|svg|ico|json)",
+      "destination": "/oop-kg/frontend/:path*.$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/oop-kg/frontend/index.html"
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OOP Interview Prep Knowledge Graph</title>
+  <meta name="description" content="Hệ thống ôn tập và chuẩn bị phỏng vấn kiến thức OOP căn bản và nâng cao thông qua Knowledge Graph tương tác.">
+  
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- D3.js for Graph Visualization -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glows -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div id="app-container">
+    <!-- Top Navigation / Search Toolbar -->
+    <header class="app-header">
+      <div class="header-brand">
+        <i data-lucide="network" class="brand-icon"></i>
+        <h1>OOP Knowledge Graph</h1>
+        <span class="badge badge-accent">Interview Prep</span>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Search bar -->
+        <div class="search-box">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="search-input" placeholder="Tìm kiếm khái niệm (ví dụ: Đa hình)...">
+          <button id="search-clear-btn" class="icon-btn hidden"><i data-lucide="x"></i></button>
+        </div>
+
+        <!-- Filter dropdown -->
+        <div class="filter-group">
+          <button id="filter-btn" class="header-btn">
+            <i data-lucide="filter"></i> Phân loại
+          </button>
+          <div id="filter-dropdown" class="dropdown-menu hidden">
+            <label class="dropdown-item">
+              <input type="checkbox" id="filter-basic" checked>
+              <span class="color-indicator category-basic"></span> Căn bản (Core)
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="filter-advanced" checked>
+              <span class="color-indicator category-advanced"></span> Nâng cao
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="filter-solid" checked>
+              <span class="color-indicator category-solid"></span> Nguyên lý SOLID
+            </label>
+            <label class="dropdown-item">
+              <input type="checkbox" id="filter-patterns" checked>
+              <span class="color-indicator category-patterns"></span> Mẫu thiết kế (Patterns)
+            </label>
+          </div>
+        </div>
+
+        <!-- Study Mode Button -->
+        <button id="study-mode-btn" class="header-btn">
+          <i data-lucide="graduation-cap"></i> Học tập
+        </button>
+
+        <!-- Admin toggle -->
+        <button id="admin-mode-btn" class="header-btn btn-admin">
+          <i data-lucide="lock"></i> Admin Mode
+        </button>
+      </div>
+    </header>
+
+    <main class="app-body">
+      <!-- Main Graph Workspace -->
+      <section class="graph-workspace">
+        <!-- Graph Canvas SVG -->
+        <svg id="graph-svg"></svg>
+        
+        <!-- Graph Legend -->
+        <div class="graph-legend">
+          <div class="legend-section">
+            <h4>Phân loại kiến thức (Màu sắc)</h4>
+            <div class="legend-row"><span class="legend-color category-basic"></span> Căn bản (Basic Core)</div>
+            <div class="legend-row"><span class="legend-color category-advanced"></span> Nâng cao (Advanced Core)</div>
+            <div class="legend-row"><span class="legend-color category-solid"></span> Nguyên lý SOLID</div>
+            <div class="legend-row"><span class="legend-color category-patterns"></span> Mẫu thiết kế (Design Patterns)</div>
+          </div>
+          <div class="legend-section">
+            <h4>Độ quan trọng (Kích thước)</h4>
+            <div class="legend-row"><span class="legend-size size-high"></span> Quan trọng cao (High)</div>
+            <div class="legend-row"><span class="legend-size size-medium"></span> Trung bình (Medium)</div>
+            <div class="legend-row"><span class="legend-size size-low"></span> Thấp (Low)</div>
+          </div>
+        </div>
+
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+          <button id="zoom-in-btn" title="Phóng to"><i data-lucide="zoom-in"></i></button>
+          <button id="zoom-out-btn" title="Thu nhỏ"><i data-lucide="zoom-out"></i></button>
+          <button id="zoom-fit-btn" title="Xem toàn bộ"><i data-lucide="maximize"></i></button>
+        </div>
+
+        <!-- Study Mode Progress Banner -->
+        <div id="study-banner" class="study-banner hidden">
+          <div class="study-progress-info">
+            <span class="study-status-title"><i data-lucide="award"></i> Lộ trình học tập</span>
+            <div class="progress-bar-container">
+              <div id="study-progress-fill" class="progress-fill"></div>
+            </div>
+            <span id="study-progress-text">Tiến trình: 0% (0/0 hoàn thành)</span>
+          </div>
+          <button id="exit-study-btn" class="close-btn"><i data-lucide="x"></i></button>
+        </div>
+      </section>
+
+      <!-- Right Panel: Concept Details & Sidebar -->
+      <aside id="details-sidebar" class="sidebar hidden">
+        <button id="close-sidebar-btn" class="sidebar-close"><i data-lucide="chevron-right"></i></button>
+        
+        <div class="sidebar-content">
+          <!-- Sidebar Header -->
+          <div class="concept-header">
+            <div class="category-meta">
+              <span id="concept-category-badge" class="badge">Basic</span>
+              <span id="concept-priority-badge" class="badge">High</span>
+              <span id="concept-mastered-badge" class="badge badge-success hidden"><i data-lucide="check"></i> Đã thuộc</span>
+            </div>
+            <h2 id="concept-title">Khái niệm OOP</h2>
+          </div>
+
+          <!-- Main Concept Tabs -->
+          <div class="tab-container">
+            <div class="tab-headers">
+              <button class="tab-btn active" data-tab="overview"><i data-lucide="book-open"></i> Tổng quan</button>
+              <button class="tab-btn" data-tab="qa"><i data-lucide="help-circle"></i> Phỏng vấn Q&A</button>
+              <button class="tab-btn" data-tab="code"><i data-lucide="code"></i> Code mẫu</button>
+            </div>
+
+            <!-- Tab Content: Overview -->
+            <div class="tab-pane active" id="tab-overview">
+              <div class="content-section">
+                <h3>Tóm tắt</h3>
+                <p id="concept-summary" class="concept-text">Mô tả tóm tắt của khái niệm sẽ xuất hiện tại đây.</p>
+              </div>
+              <div class="content-section">
+                <h3>Chi tiết kiến thức</h3>
+                <p id="concept-details" class="concept-text whitespace-pre-wrap">Chi tiết lý thuyết nâng cao sẽ được điền ở đây.</p>
+              </div>
+              <div class="content-section">
+                <h3>Mối quan hệ phụ thuộc</h3>
+                <div class="dependency-links">
+                  <div class="dep-box">
+                    <h4>Cần học trước (Prerequisites):</h4>
+                    <ul id="prereq-list" class="dep-list">
+                      <li>Không có</li>
+                    </ul>
+                  </div>
+                  <div class="dep-box">
+                    <h4>Học tiếp theo (Next Steps):</h4>
+                    <ul id="next-list" class="dep-list">
+                      <li>Không có</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="study-action-section">
+                <button id="mark-mastered-btn" class="btn btn-primary btn-block">
+                  <i data-lucide="check-circle"></i> Đánh dấu: Đã thuộc lòng
+                </button>
+              </div>
+            </div>
+
+            <!-- Tab Content: Q&A -->
+            <div class="tab-pane" id="tab-qa">
+              <div id="qa-list-container" class="qa-container">
+                <!-- Dynamically generated accordion -->
+              </div>
+            </div>
+
+            <!-- Tab Content: Code sample -->
+            <div class="tab-pane" id="tab-code">
+              <div class="code-tab-headers">
+                <button class="code-tab-btn active" data-lang="java">Java</button>
+                <button class="code-tab-btn" data-lang="cpp">C++</button>
+                <button class="code-tab-btn" data-lang="python">Python</button>
+                <button class="code-tab-btn" data-lang="typescript">TS</button>
+              </div>
+              <div class="code-block-wrapper">
+                <button id="copy-code-btn" title="Copy code"><i data-lucide="copy"></i></button>
+                <pre><code id="code-snippet-display"></code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Slide Panel: Admin Editing (Left panel or modal layout) -->
+      <aside id="admin-sidebar" class="sidebar sidebar-left hidden">
+        <div class="sidebar-header">
+          <h2><i data-lucide="edit-3"></i> Quản lý Kiến thức</h2>
+          <button id="close-admin-btn" class="sidebar-close"><i data-lucide="x"></i></button>
+        </div>
+
+        <div class="sidebar-content">
+          <!-- Editor Form -->
+          <form id="node-edit-form">
+            <input type="hidden" id="edit-node-id">
+
+            <div class="form-group">
+              <label for="edit-node-title">Tên khái niệm <span class="required">*</span></label>
+              <input type="text" id="edit-node-title" required placeholder="Ví dụ: Đa hình (Polymorphism)">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="edit-node-category">Phân loại</label>
+                <select id="edit-node-category">
+                  <option value="basic">Căn bản (Core)</option>
+                  <option value="advanced">Nâng cao</option>
+                  <option value="solid">SOLID Principles</option>
+                  <option value="patterns">Mẫu thiết kế (Patterns)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="edit-node-priority">Độ quan trọng</label>
+                <select id="edit-node-priority">
+                  <option value="high">Cao (High)</option>
+                  <option value="medium">Trung bình (Medium)</option>
+                  <option value="low">Thấp (Low)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-node-summary">Tóm tắt ngắn (Gợi ý tooltip)</label>
+              <textarea id="edit-node-summary" rows="2" required placeholder="Tóm tắt ngắn gọn khái niệm trong 1-2 câu..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-node-details">Chi tiết đầy đủ (Markdown / Text)</label>
+              <textarea id="edit-node-details" rows="5" required placeholder="Mô tả chi tiết nguyên lý hoạt động, ưu nhược điểm..."></textarea>
+            </div>
+
+            <!-- Q&A Fields Dynamic Section -->
+            <div class="form-section">
+              <div class="section-header">
+                <h3>Câu hỏi phỏng vấn</h3>
+                <button type="button" id="add-qa-field-btn" class="btn btn-secondary btn-sm"><i data-lucide="plus"></i> Thêm</button>
+              </div>
+              <div id="edit-qa-container">
+                <!-- Dynamically generated QA fields -->
+              </div>
+            </div>
+
+            <!-- Code Snippet inputs -->
+            <div class="form-section">
+              <h3>Mã nguồn minh họa</h3>
+              <div class="form-group">
+                <label for="edit-code-java">Java Code</label>
+                <textarea id="edit-code-java" class="code-textarea" rows="3" placeholder="public class Example..."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="edit-code-cpp">C++ Code</label>
+                <textarea id="edit-code-cpp" class="code-textarea" rows="3" placeholder="class Example..."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="edit-code-python">Python Code</label>
+                <textarea id="edit-code-python" class="code-textarea" rows="3" placeholder="class Example: ..."></textarea>
+              </div>
+              <div class="form-group">
+                <label for="edit-code-ts">TypeScript Code</label>
+                <textarea id="edit-code-ts" class="code-textarea" rows="3" placeholder="class Example..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" id="save-node-btn" class="btn btn-primary"><i data-lucide="save"></i> Lưu thông tin</button>
+              <button type="button" id="delete-node-btn" class="btn btn-danger hidden"><i data-lucide="trash-2"></i> Xóa nút</button>
+            </div>
+          </form>
+
+          <!-- Graph Connections (Link Manager) -->
+          <div class="form-section margin-top-lg">
+            <h3>Tạo mối quan hệ phụ thuộc</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="link-source-select">Khái niệm gốc</label>
+                <select id="link-source-select">
+                  <!-- Loaded dynamically -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="link-target-select">Khái niệm phụ thuộc</label>
+                <select id="link-target-select">
+                  <!-- Loaded dynamically -->
+                </select>
+              </div>
+            </div>
+            <button id="create-link-btn" class="btn btn-secondary btn-block"><i data-lucide="link"></i> Tạo liên kết (Nối)</button>
+          </div>
+
+          <!-- JSON Export/Import -->
+          <div class="form-section margin-top-lg">
+            <h3>Dữ liệu (JSON)</h3>
+            <div class="form-row">
+              <button id="export-json-btn" class="btn btn-secondary"><i data-lucide="download"></i> Tải về JSON</button>
+              <button id="import-json-trigger-btn" class="btn btn-secondary"><i data-lucide="upload"></i> Tải lên JSON</button>
+            </div>
+            <input type="file" id="import-json-file" class="hidden" accept=".json">
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Notification Banner -->
+  <div id="toast-container"></div>
+
+  <!-- Startup Bootstrapping -->
+  <script src="app.js"></script>
+</body>
+</html>
