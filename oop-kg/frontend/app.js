@@ -228,28 +228,89 @@ function initD3() {
   // Clear any existing defs/groups
   svg.selectAll('*').remove();
 
-  // Create defs for arrowheads
+  // Create defs for arrows, grids, gradients, and glows
   const defs = svg.append('defs');
+
+  // 1. Dot grid pattern in defs
+  defs.append('pattern')
+    .attr('id', 'dot-grid')
+    .attr('width', 24)
+    .attr('height', 24)
+    .attr('patternUnits', 'userSpaceOnUse')
+    .append('circle')
+    .attr('cx', 2)
+    .attr('cy', 2)
+    .attr('r', 1)
+    .attr('fill', 'rgba(255, 255, 255, 0.07)');
+
+  // 2. Draw static background dot grid (does not scale on zoom)
+  svg.append('rect')
+    .attr('class', 'grid-bg')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('fill', 'url(#dot-grid)')
+    .style('pointer-events', 'none');
+
+  // 3. Radial Gradients for premium 3D sphere look
+  const gradTypes = [
+    { id: 'grad-basic', colors: ['#d8b4fe', '#7c3aed'] },     // Purple
+    { id: 'grad-advanced', colors: ['#67e8f9', '#0891b2'] },  // Cyan
+    { id: 'grad-solid', colors: ['#6ee7b7', '#059669'] },     // Emerald
+    { id: 'grad-patterns', colors: ['#fda4af', '#e11d48'] }   // Rose
+  ];
+
+  gradTypes.forEach(g => {
+    const grad = defs.append('radialGradient')
+      .attr('id', g.id)
+      .attr('cx', '35%')
+      .attr('cy', '35%')
+      .attr('r', '65%');
+    grad.append('stop').attr('offset', '0%').attr('stop-color', g.colors[0]);
+    grad.append('stop').attr('offset', '100%').attr('stop-color', g.colors[1]);
+  });
+
+  // 4. Glow filter for hovered/selected nodes
+  const glowFilter = defs.append('filter')
+    .attr('id', 'node-glow')
+    .attr('x', '-50%')
+    .attr('y', '-50%')
+    .attr('width', '200%')
+    .attr('height', '200%');
+    
+  glowFilter.append('feGaussianBlur')
+    .attr('stdDeviation', '6')
+    .attr('result', 'blur');
+    
+  glowFilter.append('feComponentTransfer')
+    .attr('in', 'blur')
+    .attr('result', 'glow')
+    .append('feFuncA')
+    .attr('type', 'linear')
+    .attr('slope', '0.65');
+
+  const feMerge = glowFilter.append('feMerge');
+  feMerge.append('feMergeNode').attr('in', 'glow');
+  feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
   
   // Standard arrow marker
   defs.append('marker')
     .attr('id', 'arrowhead')
     .attr('viewBox', '0 -5 10 10')
-    .attr('refX', 22) // Place arrowhead near node border
+    .attr('refX', 24) // Place arrowhead near node border
     .attr('refY', 0)
     .attr('markerWidth', 7)
     .attr('markerHeight', 7)
     .attr('orient', 'auto')
     .append('path')
     .attr('d', 'M0,-4 L8,0 L0,4')
-    .attr('fill', '#94a3b8')
-    .style('opacity', '0.5');
+    .attr('fill', '#475569')
+    .style('opacity', '0.6');
 
   // Highlighted arrow marker
   defs.append('marker')
     .attr('id', 'arrowhead-active')
     .attr('viewBox', '0 -5 10 10')
-    .attr('refX', 22)
+    .attr('refX', 24)
     .attr('refY', 0)
     .attr('markerWidth', 8)
     .attr('markerHeight', 8)
@@ -359,7 +420,7 @@ function renderGraph() {
   // 3. Apply Node properties & colors
   nodes.select('.node-circle')
     .attr('r', d => PRIORITY_SIZES[d.priority || 'medium'])
-    .attr('fill', d => CATEGORY_COLORS[d.category || 'basic'])
+    .attr('fill', d => `url(#grad-${d.category || 'basic'})`) // Radial gradient fill
     .style('color', d => CATEGORY_COLORS[d.category || 'basic']); // For currentColor filter-glows
 
   nodes.select('.node-label')
