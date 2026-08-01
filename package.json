@@ -2,6 +2,11 @@
   "name": "oop-kg-root",
   "version": "1.0.0",
   "description": "Root configuration for Vercel deployment of OOP Knowledge Graph",
+  "scripts": {
+    "start": "node oop-kg/backend/server.js",
+    "test": "node oop-kg/backend/verify-backend.test.js",
+    "test:extract": "node .agents/skills/hs-extract-oop/extract.js --test"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2"

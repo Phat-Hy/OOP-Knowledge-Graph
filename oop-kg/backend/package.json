@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node verify-backend.js"
+    "test": "node verify-backend.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
